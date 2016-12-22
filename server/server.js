@@ -12,29 +12,25 @@ const app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
+//custom modules
+var { generateMessage } = require('./utils/message.js')
+
+
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
 	console.log('Connected to User');
 
 	// Send a welcome message when a user enters the chat room
-	socket.emit('newMessage', {
-		from: 'Admin',
-		text: 'Welcome New User'
-	});
+	socket.emit('newMessage', generateMessage('Admin', 'Welcome New User'));
 
 	// Added the boradcast message to all others in the connection when a new user joins
-	socket.broadcast.emit('newMessage', {
-		from: 'Admin',
-		text: 'New user has Joined'
-	});
+	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has Joined'));
 
 	socket.on('createMessage', (newMessage) => {
 		console.log('createEmail', newMessage);
 
-		newMessage.createdAt = new Date().getTime();
-
-		io.emit('newMessage', newMessage);
+		io.emit('newMessage', generateMessage(newMessage.from, newMessage.text));
 
 		// socket.broadcast.emit('newMessage', newMessage);
 
@@ -43,10 +39,7 @@ io.on('connection', (socket) => {
 	socket.on('disconnect', () => {
 		console.log('Disconnected from Client');
 
-		socket.broadcast.emit('newMessage', {
-			from: 'Admin',
-			text: 'User has left.'
-		})
+		socket.broadcast.emit('newMessage', generateMessage('Admin', 'User has left.'));
 	});
 
 });
