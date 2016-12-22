@@ -20,15 +20,15 @@ io.on('connection', (socket) => {
 	socket.on('createMessage', (newMessage) => {
 		console.log('createEmail', newMessage);
 
-		newMessage.createdAt = new Date();
+		newMessage.createdAt = new Date().getTime();
 
-		socket.emit('newMessage', newMessage);
+		io.emit('newMessage', newMessage);
 	});
 
 	socket.on('disconnect', () => {
 		console.log('Disconnected from Client');
 	});
-	
+
 });
 
 
