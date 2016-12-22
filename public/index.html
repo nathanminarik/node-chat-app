@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset='UTF-8'>
-    </head>
-    <body>
-        <p>Hello World</p>
-    </body>
+	<head>
+		<meta charset='UTF-8'>
+	</head>
+	<body>
+		<p>Hello World</p>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+				var socket = io();
+
+				socket.on('connect', () => {
+					console.log('Connected to Server')
+				});
+
+				socket.on('disconnect', () => {
+					console.log('Disconnected From Server');
+				})
+				
+		</script>
+	</body>
 </html>
