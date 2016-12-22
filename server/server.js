@@ -12,16 +12,26 @@ const app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
+app.use(express.static(publicPath));
+
 io.on('connection', (socket) => {
 	console.log('Connected to User');
 
+	socket.on('createMessage', (newMessage) => {
+		console.log('createEmail', newMessage);
+
+		newMessage.createdAt = new Date();
+
+		socket.emit('newMessage', newMessage);
+	});
+
 	socket.on('disconnect', () => {
 		console.log('Disconnected from Client');
-	})
+	});
+	
 });
 
 
-app.use(express.static(publicPath));
 
 server.listen(port, () => {
 	console.log(`App is running on port ${port}`);
