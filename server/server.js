@@ -17,16 +17,36 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('Connected to User');
 
+	// Send a welcome message when a user enters the chat room
+	socket.emit('newMessage', {
+		from: 'Admin',
+		text: 'Welcome New User'
+	});
+
+	// Added the boradcast message to all others in the connection when a new user joins
+	socket.broadcast.emit('newMessage', {
+		from: 'Admin',
+		text: 'New user has Joined'
+	});
+
 	socket.on('createMessage', (newMessage) => {
 		console.log('createEmail', newMessage);
 
 		newMessage.createdAt = new Date().getTime();
 
 		io.emit('newMessage', newMessage);
+
+		// socket.broadcast.emit('newMessage', newMessage);
+
 	});
 
 	socket.on('disconnect', () => {
 		console.log('Disconnected from Client');
+
+		socket.broadcast.emit('newMessage', {
+			from: 'Admin',
+			text: 'User has left.'
+		})
 	});
 
 });
