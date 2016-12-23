@@ -27,6 +27,24 @@
 			console.log('This should work');
 		});
 	});
+
+	var locationButton = $('#send-location');
+
+	locationButton.on('click', function (e) {
+		if(!navigator.geolocation) {
+			return alert('Geolocation is not supported by your browser');
+		}
+
+		navigator.geolocation.getCurrentPosition(function(position) {
+			socket.emit('createLocationMessage', {
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude
+			});
+		}, function (error) {
+			alert('Unable to fetch location');
+		})
+	});
+
 })(jQuery)
 
 // socket.emit('createMessage', {
