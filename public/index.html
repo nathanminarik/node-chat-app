@@ -4,9 +4,19 @@
 		<meta charset='UTF-8'>
 	</head>
 	<body>
-		<p>Hello World</p>
+		<p>Hello Chat App</p>
+
+		<ol id="messages">
+		</ol>
+
+		<form action="submit" id='message-form'>
+			<input type="text" name='message' placeholder='Enter a message' />
+			<button>Send</button>
+
+		</form>
 
 		<script src="/socket.io/socket.io.js"></script>
+		<script src='./src/libs/jquery.min.js'></script>
 		<script src='./src/index.js'></script>
 	</body>
 </html>

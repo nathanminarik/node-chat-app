@@ -27,12 +27,11 @@ io.on('connection', (socket) => {
 	// Added the boradcast message to all others in the connection when a new user joins
 	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has Joined'));
 
-	socket.on('createMessage', (newMessage) => {
+	socket.on('createMessage', (newMessage, callback) => {
 		console.log('createEmail', newMessage);
 
 		io.emit('newMessage', generateMessage(newMessage.from, newMessage.text));
-
-		// socket.broadcast.emit('newMessage', newMessage);
+		callback(`${2+2} This is from the server`);
 
 	});
 
