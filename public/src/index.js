@@ -3,6 +3,25 @@
 	var socket = io();
 	var locationButton = $('#send-location');
 
+	function scrollToBottom () {
+		// Selectors
+		var messages = $('#messages');
+		var newMessage = messages.children('li:last-child');
+		// Heights
+		var clientHeight = messages.prop('clientHeight');
+		var scrollTop = messages.prop('scrollTop');
+		var scrollHeight = messages.prop('scrollHeight');
+		var newMessageHeight = newMessage.innerHeight();
+		var lastMessageHeight = newMessage.prev().innerHeight();
+
+		if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+			messages.animate({scrollTop:scrollHeight}, 1500);
+			return false;
+		}
+	}
+
+
+
 	socket.on('connect', function () {
 		console.log('Connected to Server')
 	});
@@ -19,12 +38,8 @@
 		});
 
 		$('#messages').append(html);
+		scrollToBottom();
 
-		
-		// var li = $('<li></li>');
-		// li.text('From: ' + message.from + ' @' + formattedTime + ' | Message: ' + message.text);
-	
-		// $('#messages').append(li);
 	});
 
 	socket.on('disconnect', function () {
@@ -44,6 +59,8 @@
 
 
 		$('#messages').append(html);
+
+		scrollToBottom();
 
 		locationButton.text('Send Location').removeAttr('disabled');
 
