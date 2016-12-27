@@ -8,11 +8,23 @@
 	});
 
 	socket.on('newMessage', function (message) {
+		
+		var template = $('#message-template').html();
 		var formattedTime = moment(message.createdAt).format('h:mm a')
-		var li = $('<li></li>');
-		li.text('From: ' + message.from + ' @' + formattedTime + ' | Message: ' + message.text);
+
+		var html = Mustache.render(template, {
+			text: message.text,
+			createdAt: formattedTime,
+			from: message.from
+		});
+
+		$('#messages').append(html);
+
+		
+		// var li = $('<li></li>');
+		// li.text('From: ' + message.from + ' @' + formattedTime + ' | Message: ' + message.text);
 	
-		$('#messages').append(li);
+		// $('#messages').append(li);
 	});
 
 	socket.on('disconnect', function () {
@@ -22,15 +34,16 @@
 	socket.on('newLocationMessage', function (message) {
 		var formattedTime = moment(message.createdAt).format('h:mm a')
 
-		var li = $('<li></li>');
-		var a = $('<a target="_blank">My current location</a>');
+		var template = $('#location-message-template').html();
 
-		li.text('From: ' + message.from + ' @' + formattedTime + ' ');
-		a.attr('href', message.url);
+		var html = Mustache.render(template, {
+			from: message.from,
+			createdAt: formattedTime,
+			url: message.url
+		});
 
-		li.append(a);
 
-		$('#messages').append(li);
+		$('#messages').append(html);
 
 		locationButton.text('Send Location').removeAttr('disabled');
 
