@@ -23,7 +23,15 @@
 
 
 	socket.on('connect', function () {
-		console.log('Connected to Server')
+		var params = $.deparam();
+		socket.emit('join', params, function (err) {
+			if (err) {
+				alert(err);
+				window.location.href = '/'
+			} else {
+				console.log('No error');
+			}
+		});
 	});
 
 	socket.on('newMessage', function (message) {
